@@ -86,3 +86,23 @@ def get_stock_news(symbol: str = Query(...)):
         "symbol": symbol,
         "news": news
     }
+
+# 3. COMPANY FINANCIALS
+def fetch_financial_data(symbol: str, function: str):
+    url = "https://www.alphavantage.co/query"
+    params = {
+        "function": function,
+        "symbol": symbol,
+        "apikey": ALPHA_VANTAGE_API_KEY
+    }
+    return requests.get(url, params=params).json()
+
+@app.get("/stocks/financials")
+def get_company_financials(symbol: str = Query(...)):
+    return {
+        "symbol": symbol,
+        "overview": fetch_financial_data(symbol, "OVERVIEW"),
+        "income_statement": fetch_financial_data(symbol, "INCOME_STATEMENT"),
+        "balance_sheet": fetch_financial_data(symbol, "BALANCE_SHEET"),
+        "cash_flow": fetch_financial_data(symbol, "CASH_FLOW")
+    }
