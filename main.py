@@ -51,3 +51,38 @@ def get_stock_data(symbol: str = Query(...)):
         }
 
     return {"error": response.get("Error Message", "Unknown error") or response}
+
+# Endpoint to get stock news for the last week
+@app.get("/stocks/news")
+def get_stock_news(symbol: str = Query(...)):
+    today = datetime.utcnow().date()
+    last_week = today - timedelta(days=7)
+
+    url = "https://newsapi.org/v2/everything"
+    params = {
+        "q": symbol,
+        "from": last_week.isoformat(),
+        "to": today.isoformat(),
+        "sortBy": "publishedAt",
+        "language": "en",
+        "apiKey": NEWS_API_KEY
+    }
+
+    response = requests.get(url, params=params).json()
+
+    if "articles" not in response:
+        return {"error": response.get("message", "Unknown error from NewsAPI")}
+
+    articles = response["articles"]
+    news = [{
+        "title": article["title"],
+        "description": article["description"],
+        "url": article["url"],
+        "publishedAt": article["publishedAt"],
+        "sentiment": analyze_sentiment(article["title"])
+    } for article in articles]
+
+    return {
+        "symbol": symbol,
+        "news": news
+    }
