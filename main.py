@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import os
 from dotenv import load_dotenv
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-from .services import analyze_sentiment
+from services import analyze_sentiment
 
 app = FastAPI(title="Stock Pulse API")
 load_dotenv()
