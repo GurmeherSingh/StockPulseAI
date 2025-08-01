@@ -52,6 +52,7 @@ def get_stock_data(symbol: str = Query(...)):
 
     return {"error": response.get("Error Message", "Unknown error") or response}
 
+
 # Endpoint to get stock news for the last week
 @app.get("/stocks/news")
 def get_stock_news(symbol: str = Query(...)):
@@ -86,3 +87,5 @@ def get_stock_news(symbol: str = Query(...)):
         "symbol": symbol,
         "news": news
     }
+=======
+
