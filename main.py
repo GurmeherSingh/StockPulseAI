@@ -51,3 +51,4 @@ def get_stock_data(symbol: str = Query(...)):
         }
 
     return {"error": response.get("Error Message", "Unknown error") or response}
+
