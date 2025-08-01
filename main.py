@@ -52,6 +52,7 @@ def get_stock_data(symbol: str = Query(...)):
 
     return {"error": response.get("Error Message", "Unknown error") or response}
 
+
 # Endpoint to get stock news for the last week
 @app.get("/stocks/news")
 def get_stock_news(symbol: str = Query(...)):
@@ -87,6 +88,7 @@ def get_stock_news(symbol: str = Query(...)):
         "news": news
     }
 
+
 # 3. COMPANY FINANCIALS
 def fetch_financial_data(symbol: str, function: str):
     url = "https://www.alphavantage.co/query"
@@ -106,3 +108,4 @@ def get_company_financials(symbol: str = Query(...)):
         "balance_sheet": fetch_financial_data(symbol, "BALANCE_SHEET"),
         "cash_flow": fetch_financial_data(symbol, "CASH_FLOW")
     }
+
