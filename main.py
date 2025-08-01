@@ -1,4 +1,6 @@
 from fastapi import FastAPI, Query
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from typing import List, Dict
 import requests
 from datetime import datetime, timedelta
@@ -9,9 +11,17 @@ from services.sentiment import analyze_sentiment
 
 app = FastAPI(title="Stock Pulse API")
 load_dotenv()
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:3000", "http://127.0.0.1:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 ALPHA_VANTAGE_API_KEY = os.getenv("ALPHA_VANTAGE_API_KEY")
 NEWS_API_KEY = os.getenv("NEWS_API_KEY")
-app = FastAPI()
 analyzer = SentimentIntensityAnalyzer()
 
 # Endpoint to get stock data for the last 7 days
@@ -108,4 +118,3 @@ def get_company_financials(symbol: str = Query(...)):
         "balance_sheet": fetch_financial_data(symbol, "BALANCE_SHEET"),
         "cash_flow": fetch_financial_data(symbol, "CASH_FLOW")
     }
-
