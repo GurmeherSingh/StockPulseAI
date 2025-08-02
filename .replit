@@ -16,3 +16,28 @@ externalPort = 80
 localPort = 5173
 externalPort = 5173
 exposeLocalhost = true
+
+[workflows]
+runButton = "Full Stack Dev"
+
+[[workflows.workflow]]
+name = "Start Frontend"
+author = 40235466
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd frontend && npm run dev -- --host 0.0.0.0 --port 5173"
+
+[[workflows.workflow]]
+name = "Full Stack Dev"
+author = 40235466
+mode = "parallel"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd frontend && npm run dev -- --host 0.0.0.0 --port 5173"
